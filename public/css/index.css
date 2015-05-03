@@ -1,0 +1,67 @@
+.cause-card {
+  cursor: pointer;
+}
+header {
+}
+
+
+* {
+  -webkit-font-smoothing: antialiased;
+  font-family: "Open Sans";
+  font-weight: 600;
+}
+a {
+  color: rgb(30, 100, 160)
+}
+
+h1 {
+  font-family: Gudea;
+  line-height: 65%;
+  font-size: 52px;
+}
+#main {
+  background: #C5E3FA;
+  padding-bottom: 50px;
+}
+
+.logo {
+  height: 55px;
+  margin: 10px 0;
+}
+img.handup, img.water {
+  display: block;
+  width: 80%;
+  margin: 0 auto;
+}
+
+#file-reader {
+  display: none;
+}
+
+.row {
+  text-align: center;
+}
+
+#signup, #email {
+  width: 50%;
+  display: block;
+  margin: 10px auto;
+}
+
+.crop-area {
+  overflow: hidden;
+  width:500px;
+  height:500px;
+  margin: 0 auto;
+}
+
+@media (max-width: 1000px){
+  h1, h2, h3, h4 {
+    position: relative;
+    display: block;
+    font-size: 5vw;
+  }
+  h1 {
+    font-size:8vw;
+  }
+}
