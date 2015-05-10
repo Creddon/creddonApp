@@ -1,0 +1,28 @@
+<div ng-controller="causeCtrl">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <h1>
+          {{cause.total}} Tweets Raised ${{cause.total}}
+          <br>
+          for
+          <br>
+          {{cause.name}}
+        </h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <img ng-src="img/{{cause.id}}-{{sponsor.id}}.png">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <textarea placeholder="Caption: Mention a Friend to Increase Your Impact"></textarea>
+      </div>
+      <div class="col-md-12">
+        <a ng-click="tweet()">Tweet this Photo</a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,25 +1,316 @@
-.cause-card {
+/*.cause-card {
   cursor: pointer;
-}
-header {
-}
+}*/
 
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
+}
 
 * {
-  -webkit-font-smoothing: antialiased;
-  font-family: "Open Sans";
-  font-weight: 600;
-}
-a {
-  color: rgb(30, 100, 160)
+  -webkit-font-smoothing: antialiased !important;
+  font-family: "Asap" !important;
+  font-weight: 500;
+  color: #134777;
 }
 
-h1 {
-  font-family: Gudea;
-  line-height: 65%;
-  font-size: 52px;
+.nav-right {
+  line-height: 400%;
+  font-size: 16px;
 }
-#main {
+
+.nav-right a {
+  padding: 0 6px;
+}
+
+.nav-right span {
+  padding-right: 30px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Asap";
+}
+
+header {
+  text-align: center;
+}
+
+header img {
+  height: 44px;
+  margin: 8px auto;
+}
+
+div[ng-controller="homeCtrl"] {
+  text-align: center;
+}
+
+#gradient {
+  background-image: url("../img/home-gradient.png")
+}
+
+.instructions img {
+  display: block;
+  width: 50%;
+  margin: 0 auto;
+}
+
+#jar {
+  /*display: block;*/
+  width: 70px;
+  float: left;
+  position: relative;
+  margin-left: 80px;
+}
+#jar-text {
+  padding: 20px 20px 0 0;
+  font-size: 20px;
+  text-align: center;
+}
+.instructions h2 {
+  font-size: 4.5rem;
+}
+
+.instructions h4 {
+  padding: 20px 0;
+  font-size: 3.5rem;
+}
+
+.intro-row {
+  padding: 50px 0;
+}
+
+.intro-row h1 {
+  font-size: 5.5rem;
+}
+
+.down-arrow-row {
+  padding: 25px;
+}
+
+.down-arrow {
+  width: 50%;
+  display: block;
+  margin: 0 auto;
+}
+
+.cause-container {
+  padding: 50px 0;
+}
+
+.cause-headline {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 600;
+  color: #134777;
+  margin-top: 35px;
+}
+
+.cause {
+  margin: 20px 35px;
+  box-shadow: 4px 4px 4px #ccc;
+}
+
+.cause div[class^="col"] {
+  padding: 0px 0px !important;
+  position: relative;
+  float: left;
+  clear: both;
+}
+
+.desc-col {
+  float: right;
+  padding: 0px 0px !important;
+}
+
+.cause .description {
+  text-align: left;
+  font-size: 12px;
+  color: #134777;
+}
+
+.cause a {
+  display: block;
+  background: #203f65;
+  padding: 15px 0;
+  font-size: 24px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.cause a:hover {
+  text-decoration: none;
+}
+
+.cause-logo {
+  max-height: 100px;
+}
+
+.cause-img,
+.cause-logo {
+  width: 100%;
+}
+
+.sponsor-container {
+  background: #7c91c8;
+}
+
+.sponsor-container .sponsor-image-col {
+  padding: 50px;
+}
+
+.sponsor-container .sponsor-image-col .img {
+  background-color: #fff;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  -webkit-background-size: contain;
+  background-size: contain;
+  display: block;
+  height: 120px;
+  width: 100%;
+  margin: 0 auto;
+  border: 10px solid #fff;
+}
+
+.sponsor-container .sponsor-image-col .img.previous-sponsors {
+  width: 50%;
+}
+
+.sponsor-container .sponsor-image-col .email-us {
+  line-height: 200%;
+  font-size: 20px;
+}
+
+.sponsor-container .sponsor-image-col .email-us a {
+  color: #7c91c8
+}
+
+.sponsor-container h2 {
+  padding-top: 35px;
+  font-size: 4.5rem;
+  color: #fff;
+}
+
+.sponsor-container h3 {
+  font-size: 3rem;
+  color: #fff;
+  margin: 15px 0 0 0;
+}
+
+.signup-container .signup-col {
+  padding: 0 50px 50px 50px;
+}
+
+.signup-container h3 {
+  padding: 25px 0;
+}
+
+.signup-container .input-col {
+  padding-top: 25px;
+}
+
+.signup-container input {
+  height: 45px;
+  border-radius: 0px;
+  border: 1px solid #203f65;
+  font-size: 18px;
+  color: #134777;
+}
+
+.signup-container button {
+  margin-top: 25px;
+  float: right;
+  display: block;
+  background: #203f65;
+  padding: 8px 25px;
+  font-size: 24px;
+  color: #fff;
+  cursor: pointer;
+  border: 0px;
+  box-shadow: 2px 2px 2px #ccc;
+}
+
+.signup-container label {
+  font-weight: normal;
+  font-size: 1.8rem;
+  display: block;
+  padding-left: 15px;
+  text-indent: -15px;
+}
+
+.signup-container .checkbox {
+  clear: both;
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  padding: 0;
+  margin: 0;
+  vertical-align: bottom;
+  position: relative;
+  top: -1px;
+  overflow: hidden;
+}
+
+
+.signup-container .checkbox:checked{
+  background-image: url("../img/checkbox.png");
+}
+
+
+
+
+
+
+
+
+
+footer {
+  padding: 50px 50px !important;
+  font-size: 20px;
+  background: #134777;
+}
+footer .contact-info {
+  text-align: left;
+  line-height: 120%;
+}
+footer .contact-info span {
+  display: block;
+  color: #fff;
+}
+
+footer .sitemap-links {
+  text-align: right;
+}
+footer .sitemap-links a {
+  padding: 0 8px;
+}
+footer a {
+  color: #fff;
+}
+footer a:hover {
+  color: #fff;
+}
+
+
+@media (max-width: 1000px) {
+  h1,
+  h2,
+  h3,
+  h4 {
+    position: relative;
+    display: block;
+    font-size: 5vw;
+  }
+  h1 {
+    font-size: 8vw;
+  }
+}
+/*#main {
   background: #C5E3FA;
   padding-bottom: 50px;
 }
@@ -53,15 +344,4 @@ img.handup, img.water {
   width:500px;
   height:500px;
   margin: 0 auto;
-}
-
-@media (max-width: 1000px){
-  h1, h2, h3, h4 {
-    position: relative;
-    display: block;
-    font-size: 5vw;
-  }
-  h1 {
-    font-size:8vw;
-  }
-}
+}*/

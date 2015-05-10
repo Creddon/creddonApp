@@ -1,0 +1,94 @@
+<div ng-controller="homeCtrl">
+  <div id="gradient" class="container-fluid">
+    <div class="row intro-row">
+      <h1>Tweet a Photo to Donate $1</h1>
+      <h3>You Tweet. A Sponsor Pays.</h3>
+    </div>
+    <div class="instructions row">
+      <div class="col-md-4">
+        <h2>1</h2>
+        <h4>Pick a Cause</h4>
+        <img src="img/home-cause.png">
+      </div>
+      <div class="col-md-4">
+        <h2>2</h2>
+        <h4>Tweet a Photo</h4>
+        <img src="img/home-tweet.png">
+      </div>
+      <div class="col-md-4">
+        <h2>3</h2>
+        <h4>Thank You</h4>
+        <img src="img/home-jar.png" id="jar">
+        <p id="jar-text">You made a <br>sponsor donate <br>$1 to the cause.</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-2 col-md-push-5 down-arrow-row">
+        <img src="img/down-arrow.png" class="down-arrow" alt="Down">
+        <h3>View Causes</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid cause-container">
+    <div class="row">
+      <div ng-repeat="cause in causes" ng-if="cause" class="col-md-6">
+        <h3 class="cause-headline">{{cause.headline}}</h3>
+        <div class="cause row">
+          <img ng-src="img/{{cause.id}}-photo.png" class="cause-img" alt="{{cause.name}} image.">
+          <div class="col-xs-4">
+            <img ng-src="img/{{cause.id}}-logo.png" class="cause-logo">
+          </div>
+          <div class="desc-col col-xs-8">
+            <span class="description">{{cause.description.slice(0,100)+"..."}}</span>
+            <a ng-click="goCause(cause)" class="support-button">I Support This!</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid sponsor-container">
+    <h2>Sponsors</h2>
+    <div class="row">
+      <div ng-repeat="sponsorImage in sponsorImages.slice(0,5)" class="col-md-4 sponsor-image-col">
+        <a ng-href="{{sponsorLinks[$index]}}">
+          <div ng-style="{'background-image': 'url(img/'+sponsorImage+')'}" class="img"></div>
+        </a>
+      </div>
+      <div class="col-md-4 sponsor-image-col">
+        <div class="img">
+          <span class="email-us">
+            Want to know more about sponsoring?
+            <a href="#">Email us</a>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <h3>Previous Sponsors</h3>
+      <div ng-repeat="sponsorImage in sponsorImages.slice(5)" class="col-md-6 sponsor-image-col">
+        <a ng-href="{{sponsorLinks[$index+5]}}">
+          <div ng-style="{'background-image': 'url(img/'+sponsorImage+')'}" class="img previous-sponsors"></div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid signup-container">
+    <h3>Sign up here for early access to the Creddon app<br>(iOS & Android). We won't spam you.</h3>
+    <div class="row">
+    <div class="col-md-8 col-md-push-2 signup-col">
+      <input ng-model="emailAddress" class="form-control" type="text" placeholder="Email Address">
+      <div class="row">
+        <div class="col-md-8 input-col">
+          <label for="signup"><input type="checkbox" id="signup" class="checkbox" aria-label="Email Address">Yes, remind me every two weeks to tweet for a cause.</label>
+        </div>
+        <div class="col-md-4">
+          <button class="support-button">Submit</button>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>

@@ -9,28 +9,73 @@ angular.module("Creddon", [
   $urlRouterProvider.otherwise("/")
 
   $stateProvider
-    .state("landing", {
+    .state("home", {
       url: "/",
-      templateUrl: "templates/landing.html"
+      templateUrl: "templates/home.html"
     })
-    .state("causes", {
-      url: "/causes",
-      templateUrl: "templates/causes.html"
+    .state("cause", {
+      url: "/cause/:causeId/:sponsorId",
+      templateUrl: "templates/cause.html"
+    })
+    .state("thank", {
+      url: "/thank/:id",
+      templateUrl: "templates/thank.html"
     })
 }])
 
+.run(["$rootScope", function($rootScope){
+  $rootScope.grandTotal = 183735
+}])
 
-.controller("landingCtrl", ["$scope", function($scope){}])
-.controller("causesCtrl", ["$scope", "$httpf", function($scope, $httpf){
+.controller("homeCtrl", ["$scope", "$httpf", "$state", function($scope, $httpf, $state){
 
-  $scope.tw = false
-  $scope.fb = false
-  $scope.ig = false
+  $scope.goCause = function(cause){
+    var sponsors = [],
+        sponsorIds = cause.sponsorIds
+    for (var i=0;i<sponsorIds.length;i++){
+      sponsors.push($scope.sponsors[sponsorIds[i]])
+    }
 
-  $scope.selectCause = function(cause) {
-    $scope.selectedCause = cause
-    angular.element("#file-reader").trigger("click")
+    var total = 0, sponsorTotals = {}
+    for (var i=0;i<sponsors.length;i++){
+      var sponsor = sponsors[i] // sponsor
+      left = sponsor.remaining/sponsor.currentBeneficiaries.length // sponsor left
+      sponsorTotals[sponsor.id] = left // register how much each sponsor has left
+      total += left // increment total left for sponsors
+    }
+    var random = Math.random()*(total*2), //*2 because we add base weights worth 50% in total
+        offset = total/sponsors.length, //calculate base weight to add to each sponsor
+        comparison = 0, //initiate
+        sponsorIndex = 0, //initiate
+        sponsor = {}
+    for (var k in sponsorTotals){
+      comparison += (sponsorTotals[k]+offset) //add every sponsor's budget weight & base weight to the previous weights
+      if (random < comparison) { sponsor = sponsors[sponsorIndex]; break } //stop after first success
+      sponsorIndex++ //increment arrayIndex
+    }
+
+    $state.go("cause", {causeId: cause.id, sponsorId: sponsor.id})
   }
+
+  $httpf.get(APIURL+"/causes/").success(function(data){
+    $scope.causes = data
+  }).error(log)
+  $httpf.get(APIURL+"/sponsors/").success(function(data){
+    $scope.sponsors = data
+  }).error(log)
+  $httpf.get(APIURL+"/sponsorImages/").success(function(data){
+    $scope.sponsorImages = data
+  }).error(log)
+  $httpf.get(APIURL+"/sponsorLinks/").success(function(data){
+    $scope.sponsorLinks = data
+  }).error(log)
+  // $scope.tw = false
+  // $scope.fb = false
+  // $scope.ig = false
+  // $scope.selectCause = function(cause) {
+  //   $scope.selectedCause = cause
+  //   angular.element("#file-reader").trigger("click")
+  // }
   // $scope.share = function(){
   //   $http({
   //     type: "POST",
@@ -38,29 +83,46 @@ angular.module("Creddon", [
   //     data: {img: $scope.image, logo: $scope.selectedCause.logo, tw: $scope.tw, fb: $scope.fb, ig: $scope.ig}
   //   })
   // }
+  // angular.element(document.querySelector("#file-reader")).on("change", function(e){
+  //   var file = e.currentTarget.files[0],
+  //       reader = new FileReader()
+  //   reader.onload = function(e){
+  //     $scope.image = e.target.result
+  //     $scope.$apply()
+  //   }
+  //   reader.readAsDataURL(file)
+  // })
 
-  $httpf.get(APIURL+"/causes/").success(function(data){
-    $scope.causes = data
-  }).error(log)
-
-  angular.element(document.querySelector("#file-reader")).on("change", function(e){
-    var file = e.currentTarget.files[0],
-        reader = new FileReader()
-    reader.onload = function(e){
-      $scope.image = e.target.result
-      $scope.$apply()
-    }
-    reader.readAsDataURL(file)
-  })
 }])
 
 
 
 
 
+.controller("causeCtrl", ["$scope", "$httpf", "$state", "$stateParams", function($scope, $httpf, $state, $stateParams){
+  $scope.tweet = function(){
+    $httpf.post(APIURL+"/tweet/", {id: $scope.cause.id, caption: $scope.caption}).success(function(data){
+      $state.go("thank", {id: $stateParams.id})
+    }).error(log)
+  }
+
+  $httpf.get(APIURL+"/causes/"+$stateParams.causeId).success(function(data){
+    $scope.cause = data
+  }).error(log)
+  $httpf.get(APIURL+"/sponsors/"+$stateParams.sponsorId).success(function(data){
+    $scope.sponsor = data
+  }).error(log)
+}])
 
 
 
+
+
+.controller("thankCtrl", ["$scope", "$httpf", "$stateParams", function($scope, $httpf, $stateParams){
+  $httpf.get(APIURL+"/causes/"+$stateParams.id).success(function(data){
+    $scope.cause = data
+  }).error(log)
+}])
 
 
 
@@ -86,12 +148,90 @@ angular.module("Creddon", [
 
 .service("$httpf", [function(){
   this.api = window.$apif = {
-    "causes": [
-      {"id":1, "name":"ACS", "description":"For over 100 years...", "totalDonations": 23098, "link":"", "logo":"img/acs.png"},
-      {"id":2, "name":"Kiva", "description":"We are a non-profit...", "totalDonations": 163083, "link":"", "logo":"img/kiva.png"},
-      {"id":3, "name":"Unicef", "description":"UNICEF promotes...", "totalDonations": 97856, "link":"", "logo":"img/unicef.png"},
-      {"id":4, "name":"Water.org", "description":"Water.org provides...", "totalDonations": 303875, "link":"", "logo":"img/water.png"}
-    ]
+    "causes": [undefined,
+      {"id":1, "sponsorIds":[1,2,3,5], "name":"Effect", "headline":"Nepal Earthquake Relief", "total": 303875, "link":"", "description":"Effect built NepalRises.com in 8 hours and a bot scanning Twitter @nepalrises to understand who needs help and act immediately. For many, Effect is the first to provide aid. \"I know the Effect team personally, and have met many of the local Nepali volunteers that banded together to launch Nepalrises.com. I'm confident that the money is going directly towards purchasing food, temporary shelter & medical equipment.\"— Elyse May @elyserobyn"},
+      {"id":2, "sponsorIds":[1,3,4,5], "name":"Girls Who Code", "headline":"Gender Parity in Tech", "total": 23098, "link":"", "description":"Girls Who Code works to educate, inspire, and equip high school girls with the skills and resources to pursue opportunities in computing fields."},
+      {"id":3, "sponsorIds":[1,3,5], "name":"Kiva","headline":"Poverty Alleviation", "total": 163083, "link":"", "description":"Kiva's mission is to connect people through lending to alleviate poverty. Through Kiva, individuals can lend as little as $25 to help create opportunity around the world."},
+      {"id":4, "sponsorIds":[1,3,4,5], "name":"Watsi","headline":"Life-changing Healthcare", "total": 97856, "link":"", "description":"Watsi is a global crowdfunding platform that enables anyone to donate as little as $5 to directly fund life-changing healthcare for people in need."},
+    ],
+    "tweet":[],
+    "sponsorImages":["home-lab360-logo.png", "home-startuphouse-logo.png", "home-anonymous-logo.png", "home-bebo-logo.png", "home-trackduck-logo.jpg", "home-careerdean-logo.png", "home-rhsfinancial-logo.jpg"],
+    "sponsorLinks":["http://lab360.com/", "http://startuphouse.com/", "", "http://bebo.com/", "http://trackduck.com/", "http://careerdean.com/", "http://rhsfinancial.com/"],
+    "beneficiaries": ["",{
+      id: 1,
+      name: "Effect International",
+      url: "http://effect.org/",
+      twitter: "@effectint",
+      received: 0,
+      due: 0
+    }, {
+      id: 2,
+      name: "Girls Who Code",
+      url: "http://girlswhocode.com/",
+      twitter: "@GirlsWhoCode",
+      received: 0,
+      due: 0
+    }, {
+      id: 3,
+      name: "Kiva",
+      url: "http://kiva.org/",
+      twitter: "@Kiva",
+      received: 64,
+      due: 0
+    }, {
+      id: 4,
+      name: "Watsi",
+      url: "http://watsi.org/",
+      twitter: "@watsi",
+      received: 0,
+      due: 0
+    }],
+    "sponsors": ["",{
+      id: 1,
+      name: "Bebo",
+      url: "http://bebo.com/",
+      twitter: "@Bebo_Official",
+      currentBeneficiaries: [1,2,3,4],
+      remaining: 72,
+      owes: 28,
+      paid: 0
+    }, {
+      id: 2,
+      name: "Elyse",
+      url: "Anonymous",
+      twitter: "Anonymous",
+      currentBeneficiaries: [1],
+      remaining: 200,
+      owes: 0,
+      paid: 0
+    }, {
+      id: 3,
+      name: "Lab360",
+      url: "http://lab360.com",
+      twitter: "",
+      currentBeneficiaries: [1,2,3,4],
+      remaining: 1000,
+      owes: 0,
+      paid: 0
+    }, {
+      id: 4,
+      name: "StartupHouse",
+      url: "http://startuphouse.com",
+      twitter: "@StartupHouse",
+      currentBeneficiaries: [2,4],
+      remaining: 200,
+      owes: 0,
+      paid: 67
+    }, {
+      id: 5,
+      name: "TrackDuck",
+      url: "http://trackduck.com",
+      twitter: "@TrackDuck",
+      currentBeneficiaries: [1,2,3,4],
+      remaining: 84,
+      owes: 16,
+      paid: 0
+    }]
   }
 
 
@@ -196,6 +336,5 @@ angular.module("Creddon", [
     return this
   }
 }])
-
 
 function log(a,b,c,d){console.log("<----- START LOG ----->");console.log(a,b);if(c||d){console.log(c||null,d||null)}console.log("<------ END LOG ------>")}
